@@ -7,6 +7,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Log4j2
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -25,5 +28,10 @@ public class ProductServiceImpl implements ProductService{
         productRepository.save(product);
         log.info("Product Created");
         return product.getProductId();
+    }
+
+    @Override
+    public List<Product> getProduct(){
+        return productRepository.findAll();
     }
 }
