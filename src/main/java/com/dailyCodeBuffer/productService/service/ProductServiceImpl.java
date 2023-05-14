@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -49,6 +50,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public ProductResponse getProductById(long productId) {
+        log.info("find Product with productId:{}",productId);
         Product product = productRepository.findById(productId)
                 .orElseThrow(()->new ProductServiceCustomException("Product not found for given id","PRODUCT_NOT_FOUND"));
         System.out.println(product);
@@ -61,5 +63,16 @@ public class ProductServiceImpl implements ProductService{
                 .build();
         return productResponse;
 
+    }
+
+    @Override
+    public void reduceQuantity(long productId, long quantity) {
+        log.info("Reduce quantity {} of Product Id : {}", quantity, productId);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new ProductServiceCustomException("Product not found", "PRODUCT_NOT_FOUND"));
+        if(product.getQuantity()<quantity)throw new ProductServiceCustomException("Product Quantity is Less", "INSUFFICIENT_QUANTITY");
+        product.setQuantity(product.getQuantity()-quantity);
+        productRepository.save(product);
+        log.info("Product Quantity updated for productId : {}",productId);
     }
 }

@@ -12,4 +12,6 @@ public interface ProductService {
     public List<ProductResponse> getProduct();
 
     public ProductResponse getProductById(long productId);
+
+    public void reduceQuantity(long productId, long quantity);
 }
